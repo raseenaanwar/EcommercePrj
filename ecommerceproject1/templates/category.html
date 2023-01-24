@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  {% if category %}
+      {{category.description | truncatewords:155}}
+  {% else %}
+      WELCOME TO BOOKWORM  ULTIMATE DESTINATION FOR SHOPPING BOOKS
+  {% endif %}
+{% endblock %}
+{% block title %}
+{% if category %}
+      {{category.name}} BOOK WORM
+  {% else %}
+      SEE OUR NEW COLLECTIONS
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+    <div>
+      <div class="row my_row_class">
+          <div class="mx-auto">
+        <p><a href="{% url 'shopapp:allProdCat' %}" >Our Books</a></p>
+      </div></div>
+    </div>
+{% endif %}
+
+<div class="mx-auto">
+  {% if category %}
+    <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+    </div><br>
+    <div>
+    <h1 class="text-center" my_title>{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+    </div>
+  {% else %}
+        <div>
+        <img class=" my_image_padding" src="{% static 'img/banner.png' %}" height="400px" width="1300px" alt="our products">
+        </div><br>
+        <div>
+            <h1 class="text-center my_title"><b>Our products collections</b></h1>
+            <p class="text-justify">Looking for a good read to lose yourself in? Then you're in the right place. Discover the best-selling page turners at the Bookworm online bookstore. Travel to different worlds with our range of fiction books and novels. Sharpen your little one's mind with our children's books. If you want to learn something new, then browse our non-fiction books for a wide variety of reads that will expand your mind. Discover the range and buy books online at great prices from Bookworm now..</p>
+        </div>
+{% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="col-6 col-xs-12 col-sm-12 col-md-4 col-lg-4 my_bottom_margin">
+            <div class="card text-center" style="min-width: 18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image" width="250px" height="250px" src="{{product.image.url}}" alt="{{product.name}}"> </a>
+            </div>
+            <div class="card-body">
+                <h4>{{product.name}}</h4>
+                <p>{{product.price}}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+    {% if products.paginator.num_pages > 1 %}
+
+     <hr>
+    <div class="text-center">
+        {% for pg in products.paginator.page_range %}
+        <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+    </div><br>
+
+</div>
+{% endblock %}
